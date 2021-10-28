@@ -3,7 +3,7 @@
 #pragma execution_character_set("UTF-8")
 
 // 初始化类对象
-SerialPortControlWindow::SerialPortControlWindow(QWidget *parent)
+SerialPortControlWindow::SerialPortControlWindow(QWidget* parent)
     : QMainWindow(parent)
 {
     ui.setupUi(this);
@@ -145,13 +145,19 @@ void SerialPortControlWindow::SerialPortSend()
 {
     dspctrl.controlBits[15] = 0x0000;
     if (ui.PIDCheckBox->isChecked())
-        dspctrl.controlBits[15] &= 0x0001;
+        dspctrl.controlBits[15] |= 0x0001;
     if (ui.GravityCheckBox->isChecked())
-        dspctrl.controlBits[15] &= 0x0002;
+        dspctrl.controlBits[15] |= 0x0002;
     if (ui.tabWidget->currentIndex() == 0)
-        dspctrl.controlBits[15] &= 0x0004;
+    {
+        dspctrl.controlBits[15] |= 0x0004;
+        dspctrl.controlBits[15] &= 0xFFF7;
+    }
     else if (ui.tabWidget->currentIndex() == 1)
-        dspctrl.controlBits[15] &= 0x0008;
+    {
+        dspctrl.controlBits[15] |= 0x0008;
+        dspctrl.controlBits[15] &= 0xFFFB;
+    }
     for (int i = 0; i < dspctrl.controlBits.size(); i++)
     {
         QByteArray data;
