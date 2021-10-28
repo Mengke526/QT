@@ -45,10 +45,12 @@ void DSPControl::DSPControlUpdata(double Tx, double Ty, double Ax, double Ay, do
 // 通信数据的力矩数据清零
 void DSPControl::DSPControlClear()
 {
-	controlBits[3] = 0x0000;
-	controlBits[4] = 0x0000;
-	controlBits[5] = 0x0000;
-	controlBits[6] = 0x0000;
+	int Tx0_hex = 10000 *  0.5;
+	int Ty0_hex = 10000 *  0.5;
+	controlBits[3] = Tx0_hex & 0x00FF;
+	controlBits[4] = (Tx0_hex >> 8) & 0x00FF;
+	controlBits[5] = Ty0_hex & 0x00FF;
+	controlBits[6] = (Ty0_hex >> 8) & 0x00FF;
 	controlBits[7] = 0x0000;
 	controlBits[8] = 0x0000;
 	controlBits[9] = 0x0000;
