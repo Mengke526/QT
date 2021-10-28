@@ -22,8 +22,8 @@ void DSPControl::DSPControlInit()
 // 更新通信数据的力矩数据
 void DSPControl::DSPControlUpdata(double Tx, double Ty, double Ax, double Ay, double Wx, double Wy)
 {
-	int Tx_hex = 10000 * Tx;
-	int Ty_hex = 10000 * Ty;
+	int Tx_hex = 10000 * (Tx + 0.5);
+	int Ty_hex = 10000 * (Ty + 0.5);
 	int Ax_hex = 10000 * Ax;
 	int Ay_hex = 10000 * Ay;
 	int Wx_hex = 10000 * Wx;
