@@ -3,6 +3,10 @@
 #include "ui_SerialPortControlWindow.h"
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
+#include <QtConcurrent/qtconcurrentrun.h>
+#include <qthread.h>
+#include <time.h>
+#include <math.h>
 #include "DSPControl.h"
 
 class SerialPortControlWindow : public QMainWindow
@@ -13,10 +17,14 @@ public:
     SerialPortControlWindow(QWidget *parent = Q_NULLPTR);
 
 private:
+    bool runflag; // 循环发送数据标志位
     Ui::SerialPortControlWindowClass ui; // ui对象
     QSerialPort serial; // 串口通信对象
     DSPControl dspctrl; // 通信数据对象
     void SerialPortSend(); // 串口输出力矩数据
+    void run(); // 多线程启动函数
+    void loop();
+    clock_t start;
 
 private slots:
     void serialPort_readyRead(); // 接收串口数据

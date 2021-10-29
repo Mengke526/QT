@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>709</width>
-    <height>439</height>
+    <height>432</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -288,8 +288,8 @@
      <widget class="QLabel" name="Wylabel">
       <property name="geometry">
        <rect>
-        <x>170</x>
-        <y>90</y>
+        <x>80</x>
+        <y>100</y>
         <width>54</width>
         <height>12</height>
        </rect>
@@ -301,8 +301,8 @@
      <widget class="QLabel" name="Wxlabel">
       <property name="geometry">
        <rect>
-        <x>170</x>
-        <y>30</y>
+        <x>80</x>
+        <y>40</y>
         <width>54</width>
         <height>12</height>
        </rect>
@@ -314,8 +314,8 @@
      <widget class="QDoubleSpinBox" name="WydoubleSpinBox">
       <property name="geometry">
        <rect>
-        <x>170</x>
-        <y>110</y>
+        <x>80</x>
+        <y>120</y>
         <width>62</width>
         <height>22</height>
        </rect>
@@ -330,8 +330,8 @@
      <widget class="QDoubleSpinBox" name="WxdoubleSpinBox">
       <property name="geometry">
        <rect>
-        <x>170</x>
-        <y>50</y>
+        <x>80</x>
+        <y>60</y>
         <width>62</width>
         <height>22</height>
        </rect>
@@ -346,8 +346,8 @@
      <widget class="QLabel" name="Axlabel">
       <property name="geometry">
        <rect>
-        <x>50</x>
-        <y>30</y>
+        <x>10</x>
+        <y>40</y>
         <width>54</width>
         <height>12</height>
        </rect>
@@ -362,8 +362,8 @@
      <widget class="QDoubleSpinBox" name="AydoubleSpinBox">
       <property name="geometry">
        <rect>
-        <x>50</x>
-        <y>110</y>
+        <x>10</x>
+        <y>120</y>
         <width>62</width>
         <height>22</height>
        </rect>
@@ -378,8 +378,8 @@
      <widget class="QDoubleSpinBox" name="AxdoubleSpinBox">
       <property name="geometry">
        <rect>
-        <x>50</x>
-        <y>50</y>
+        <x>10</x>
+        <y>60</y>
         <width>62</width>
         <height>22</height>
        </rect>
@@ -394,14 +394,52 @@
      <widget class="QLabel" name="Aylabel">
       <property name="geometry">
        <rect>
-        <x>50</x>
-        <y>90</y>
+        <x>10</x>
+        <y>100</y>
         <width>54</width>
         <height>12</height>
        </rect>
       </property>
       <property name="text">
        <string>Ay</string>
+      </property>
+     </widget>
+     <widget class="QSlider" name="TxSinSlider">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>90</y>
+        <width>160</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="minimum">
+       <number>-500</number>
+      </property>
+      <property name="maximum">
+       <number>500</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+     <widget class="QSlider" name="TySinSlider">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>20</y>
+        <width>22</width>
+        <height>160</height>
+       </rect>
+      </property>
+      <property name="minimum">
+       <number>-500</number>
+      </property>
+      <property name="maximum">
+       <number>500</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
       </property>
      </widget>
     </widget>
@@ -466,7 +504,7 @@
     <property name="geometry">
      <rect>
       <x>390</x>
-      <y>160</y>
+      <y>200</y>
       <width>71</width>
       <height>16</height>
      </rect>

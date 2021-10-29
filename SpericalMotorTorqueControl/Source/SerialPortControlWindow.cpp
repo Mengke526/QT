@@ -23,6 +23,8 @@ SerialPortControlWindow::SerialPortControlWindow(QWidget *parent)
     ui.BaudrateBox->setCurrentIndex(2);
     //初始化发送数据
     dspctrl.DSPControlInit();
+    //初始化循环发送标志位
+    runflag = 0;
 }
 
 // 接收串口数据
@@ -123,6 +125,10 @@ void SerialPortControlWindow::on_OpenButton_clicked()
         ui.PIDCheckBox->setEnabled(false);
         ui.GravityCheckBox->setEnabled(false);
         ui.tabWidget->setEnabled(false);
+        //多线程循环停止
+        runflag = 0;
+        ui.TxSinSlider->setValue(0);
+        ui.TySinSlider->setValue(0);
     }
 }
 
@@ -138,31 +144,26 @@ void SerialPortControlWindow::on_SendButton_clicked()
     dspctrl.DSPControlUpdata(Tx, Ty, Ax, Ay, Wx, Wy);
     this->SerialPortSend();
     this->SerialPortSend();
-}
-
-// 串口输出力矩数据
-void SerialPortControlWindow::SerialPortSend()
-{
-    dspctrl.controlBits[15] = 0x0000;
-    if (ui.PIDCheckBox->isChecked())
-        dspctrl.controlBits[15] &= 0x0001;
-    if (ui.GravityCheckBox->isChecked())
-        dspctrl.controlBits[15] &= 0x0002;
-    if (ui.tabWidget->currentIndex() == 0)
-        dspctrl.controlBits[15] &= 0x0004;
-    else if (ui.tabWidget->currentIndex() == 1)
-        dspctrl.controlBits[15] &= 0x0008;
-    for (int i = 0; i < dspctrl.controlBits.size(); i++)
+    if (ui.tabWidget->currentIndex() == 1)
     {
-        QByteArray data;
-        data.push_back(dspctrl.controlBits[i]);
-        serial.write(data);
+        runflag = 1;
+        start = clock();
+        run();
+    }
+    else
+    {
+        runflag = 0;
+        ui.TxSinSlider->setValue(0);
+        ui.TySinSlider->setValue(0);
     }
 }
 
 // 清零按键按下，力矩清零并输出数据
 void SerialPortControlWindow::on_ZeroButton_clicked()
 {
+    runflag = 0;
+    ui.TxSinSlider->setValue(0);
+    ui.TySinSlider->setValue(0);
     ui.TxdoubleSpinBox->setValue(0.0);
     ui.TydoubleSpinBox->setValue(0.0);
     ui.AxdoubleSpinBox->setValue(0.0);
@@ -196,4 +197,55 @@ void SerialPortControlWindow::TyslotDoubleSpinBox_Slider()
 void SerialPortControlWindow::TyslotSlider_DoubleSpinBox()
 {
     ui.TydoubleSpinBox->setValue((double)(ui.TySlider->value()) / 100.0);
+}
+
+// 串口输出力矩数据
+void SerialPortControlWindow::SerialPortSend()
+{
+    for (int i = 0; i < dspctrl.controlBits.size(); i++)
+    {
+        if (ui.PIDCheckBox->isChecked())
+            dspctrl.controlBits[15] |= 0x0001;
+        if (ui.GravityCheckBox->isChecked())
+            dspctrl.controlBits[15] |= 0x0002;
+        if (ui.tabWidget->currentIndex() == 0)
+        {
+            dspctrl.controlBits[15] |= 0x0004; 
+            dspctrl.controlBits[15] &= 0xFFF7;
+        }
+        else if (ui.tabWidget->currentIndex() == 1)
+        {
+            dspctrl.controlBits[15] |= 0x0008;
+            dspctrl.controlBits[15] &= 0xFFFB;
+        }
+        QByteArray data;
+        data.push_back(dspctrl.controlBits[i]);
+        serial.write(data);
+    }
+}
+
+// 多线程启动函数
+void SerialPortControlWindow::run()
+{
+    QtConcurrent::run(this, &SerialPortControlWindow::loop);
+}
+
+// 循环函数
+void SerialPortControlWindow::loop()
+{
+    double Ax = 1000 * ui.AxdoubleSpinBox->value();
+    double Ay = 1000 * ui.AydoubleSpinBox->value();
+    double wx = ui.WxdoubleSpinBox->value();
+    double wy = ui.WydoubleSpinBox->value();
+    double t;
+    clock_t now;
+    while (runflag)
+    {
+        now = clock();
+        t = 0.001 * (now - start);
+        int valuex = Ax * sin(wx * t);
+        int valuey = Ay * sin(wy * t);
+        ui.TxSinSlider->setValue(valuex);
+        ui.TySinSlider->setValue(valuey);
+    }
 }
