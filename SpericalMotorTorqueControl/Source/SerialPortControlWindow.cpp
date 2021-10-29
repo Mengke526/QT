@@ -209,6 +209,7 @@ void SerialPortControlWindow::SerialPortSend()
         if (ui.GravityCheckBox->isChecked())
             dspctrl.controlBits[15] |= 0x0002;
         if (ui.tabWidget->currentIndex() == 0)
+<<<<<<< HEAD
         {
             dspctrl.controlBits[15] |= 0x0004; 
             dspctrl.controlBits[15] &= 0xFFF7;
@@ -218,6 +219,11 @@ void SerialPortControlWindow::SerialPortSend()
             dspctrl.controlBits[15] |= 0x0008;
             dspctrl.controlBits[15] &= 0xFFFB;
         }
+=======
+            dspctrl.controlBits[15] |= 0x0004;
+        else if (ui.tabWidget->currentIndex() == 1)
+            dspctrl.controlBits[15] |= 0x0008;
+>>>>>>> c42466e7046073a892e97b42d3755fd5a2314960
         QByteArray data;
         data.push_back(dspctrl.controlBits[i]);
         serial.write(data);
